@@ -1,5 +1,6 @@
 security:
   enable_authenticator_manager: true
+
   # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
   password_hashers:
     Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: "auto"
@@ -13,25 +14,48 @@ security:
       entity:
         class: App\Entity\User
         property: email
+
+    app_api_provider:
+      entity:
+        class: App\Entity\ApiUser
+        property: user
+
+    all_users:
+      chain:
+        providers: ["app_user_provider", "app_api_provider"]
+
   firewalls:
     login:
       pattern: ^/api/login
       stateless: true
+      provider: all_users
       json_login:
         check_path: /api/login_check # or api_login_check as defined in config/routes.yaml
         success_handler: lexik_jwt_authentication.handler.authentication_success
         failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+    support:
+      pattern: ^/api/support
+      stateless: true
+      provider: "all_users"
+      guard:
+        authenticators:
+          - App\Security\TokenAuthenticator
+
     api:
       pattern: ^/api
       stateless: true
-      jwt: ~
+      jwt:
+        provider: all_users
+        authenticator: lexik_jwt_authentication.security.jwt_authenticator
 
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
+
     main:
       lazy: true
-      provider: app_user_provider
+      provider: all_users
 
       # activate different ways to authenticate
       # https://symfony.com/doc/current/security.html#the-firewall
@@ -45,4 +69,5 @@ security:
     # - { path: ^/admin, roles: ROLE_ADMIN }
     # - { path: ^/profile, roles: ROLE_USER }
     - { path: ^/api/login, roles: PUBLIC_ACCESS }
+    - { path: ^/api/support, roles: PUBLIC_ACCESS }
     - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
