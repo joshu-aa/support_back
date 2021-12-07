@@ -34,8 +34,8 @@ security:
         success_handler: lexik_jwt_authentication.handler.authentication_success
         failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
-    support:
-      pattern: ^/api/support
+    crm:
+      pattern: ^/api/crm
       stateless: true
       provider: "all_users"
       guard:
@@ -69,5 +69,5 @@ security:
     # - { path: ^/admin, roles: ROLE_ADMIN }
     # - { path: ^/profile, roles: ROLE_USER }
     - { path: ^/api/login, roles: PUBLIC_ACCESS }
-    - { path: ^/api/support, roles: PUBLIC_ACCESS }
+    - { path: ^/api/crm, roles: PUBLIC_ACCESS }
     - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }

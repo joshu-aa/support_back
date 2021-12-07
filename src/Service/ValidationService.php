@@ -3,14 +3,17 @@
 namespace App\Service;
 
 use App\Repository\UserRepository;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ValidationService
 {
     private $userRepository;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository,ValidatorInterface $validator)
     {
         $this->userRepository = $userRepository;
+        $this->validator = $validator;
     }
 
     public function validateRegister ($data)

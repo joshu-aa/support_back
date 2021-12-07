@@ -25,7 +25,7 @@ class OtpController extends AbstractController
     }
 
     /**
-     * @Route("/api/support/otp", methods={"POST"}, name="get_otp")
+     * @Route("/api/crm/otp", methods={"POST"}, name="get_otp")
      */
     public function otp(Request $request)
     {
@@ -38,7 +38,7 @@ class OtpController extends AbstractController
     }
 
     /**
-     * @Route("/api/support/verify_otp", methods={"POST"}, name="verify_otp")
+     * @Route("/api/crm/verify_otp", methods={"POST"}, name="verify_otp")
      */
     public function verifyOtp(Request $request)
     {
