@@ -12,12 +12,13 @@ class CardService
 {
 
     private $em;
-    private $cardValidationService;
+    private $cardRepository;
 
-    public function __construct(EntityManagerInterface $em, CardValidationService $cardValidationService)
+    public function __construct(EntityManagerInterface $em, CardValidationService $cardValidationService, CardRepository $cardRepository)
     {
         $this->em = $em;
         $this->cardValidationService = $cardValidationService;
+        $this->cardRepository = $cardRepository;
     }
 
     public function createTicket($data) 
@@ -51,6 +52,7 @@ class CardService
 
     public function  getTicket($data) 
     {
-        
+        $cards = $this->cardRepository->getCards($data);
+        return $cards;
     }
 }

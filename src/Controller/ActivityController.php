@@ -30,4 +30,18 @@ class ActivityController extends AbstractController
         return $this->json($response,  JsonResponse::HTTP_OK);
     }
 
+    /**
+     * @Route("/api/crm/get_activity", methods={"POST"}, name="get_activity")
+     */
+    public function getActivity(Request $request)
+    {
+        $content = json_decode($request->getContent(), true);
+        $response = $this->activityService->getActivity($content);
+        if (array_key_exists('error', $response)) {
+            return $this->json($response, JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        return $this->json($response,  JsonResponse::HTTP_OK);
+    }
+
+
 }

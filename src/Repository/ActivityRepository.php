@@ -47,4 +47,15 @@ class ActivityRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function getActivities($data)
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.cardId = :cardId')
+            ->setParameters(['cardId' => $data["cardId"]])
+            ->orderBy('a.timestamp', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

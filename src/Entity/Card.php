@@ -4,11 +4,11 @@ namespace App\Entity;
 
 use App\Repository\CardRepository;
 use Doctrine\ORM\Mapping as ORM;
-
+use JsonSerializable;
 /**
  * @ORM\Entity(repositoryClass=CardRepository::class)
  */
-class Card
+class Card implements JsonSerializable
 {
     /**
      * @ORM\Id
@@ -224,5 +224,24 @@ class Card
         $this->createdBy = $createdBy;
 
         return $this;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id'                => $this->id,
+            'title'             => $this->title,
+            'description'       => $this->description,
+            'ticketStatus'      => $this->ticketStatus,
+            'assignedGroup'     => $this->assignedGroup,
+            'dateResolved'      => $this->dateResolved,
+            'qualityControlFlag' => $this->qualityControlFlag,
+            'subscriberId'      => $this->subscriberId,
+            'location'          => $this->location,
+            'unitNumber'        => $this->unitNumber,
+            'towerName'         => $this->towerName,
+            'createdBy'         => $this->createdBy,
+            'timestamp'         => $this->timestamp->format("Y-m-d H:i:s"),
+        ];
     }
 }

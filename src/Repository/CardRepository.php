@@ -36,15 +36,14 @@ class CardRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?Card
+    public function getCards($data)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.ticketStatus = :ticketStatus')
+            ->andWhere('c.assignedGroup = :assignedGroup')
+            ->setParameters(['ticketStatus' => $data["ticketStatus"], 'assignedGroup' => $data["assignedGroup"]])
             ->getQuery()
-            ->getOneOrNullResult()
+            ->getResult()
         ;
     }
-    */
 }

@@ -14,10 +14,11 @@ class ActivityService
     private $em;
     private $activityValidationService;
 
-    public function __construct(EntityManagerInterface $em, ActivityValidationService $activityValidationService)
+    public function __construct(EntityManagerInterface $em, ActivityValidationService $activityValidationService, ActivityRepository $activityRepository)
     {
         $this->em = $em;
         $this->activityValidationService = $activityValidationService;
+        $this->activityRepository = $activityRepository;
     }
 
     public function createActivity($data) 
@@ -48,5 +49,11 @@ class ActivityService
         }
 
         return ["result" => "Activity created"];
+    }
+
+    public function getActivity($data) 
+    {
+        $activities = $this->activityRepository->getActivities($data);
+        return $activities;
     }
 }
