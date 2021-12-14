@@ -18,7 +18,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private $staffId;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
@@ -36,9 +36,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $password;
 
-    public function getId(): ?int
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $firstName;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $lastName;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $contactNumber;
+
+    public function getStaffId(): ?int
     {
-        return $this->id;
+        return $this->staffId;
     }
 
     public function getEmail(): ?string
@@ -123,5 +138,41 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): self
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): self
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getContactNumber(): ?string
+    {
+        return $this->contactNumber;
+    }
+
+    public function setContactNumber(?string $contactNumber): self
+    {
+        $this->contactNumber = $contactNumber;
+
+        return $this;
     }
 }

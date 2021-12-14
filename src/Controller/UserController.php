@@ -24,9 +24,8 @@ class UserController extends AbstractController
     public function getAccount()
     {
         $account = $this->getUser();
-
         $data = $this->entitySerializer->serializeEntity($account, [
-            "agentId", 
+            "staffId",
             "contactNumber", 
             "firstName", 
             "lastName",

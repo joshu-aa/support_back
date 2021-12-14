@@ -24,13 +24,15 @@ class CardValidationService
         $location       = str_replace(' ', '', $data["location"]);
         $createdBy      = str_replace(' ', '', $data["createdBy"]);
         $unitNumber     = str_replace(' ', '', $data["unitNumber"]);
+        $staffId        = str_replace(' ', '', $data["staffId"]);
 
         $input = [
                     'title'         => $title, 
                     'subscriberId'  => $subscriberId, 
                     'location'      => $location, 
                     'createdBy'     => $createdBy, 
-                    'unitNumber'    => $unitNumber
+                    'unitNumber'    => $unitNumber,
+                    'staffId'       => $staffId,
                 ];
 
         $constraints = new Assert\Collection([
@@ -49,6 +51,9 @@ class CardValidationService
 
             'unitNumber'    => [new Assert\NotBlank(["message"  => 'Unit number must not be blank']), 
                                 new Assert\NotNull(["message"   => 'Unit number must not be blank'])],
+
+            'staffId'       => [new Assert\NotBlank(["message"  => 'Staff ID must not be blank']), 
+                                new Assert\NotNull(["message"   => 'Staff ID must not be blank'])],
         ]);
 
         $violations = $this->validator->validate($input, $constraints);

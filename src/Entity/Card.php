@@ -77,6 +77,11 @@ class Card implements JsonSerializable
      */
     private $createdBy;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $staffId;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -241,7 +246,20 @@ class Card implements JsonSerializable
             'unitNumber'        => $this->unitNumber,
             'towerName'         => $this->towerName,
             'createdBy'         => $this->createdBy,
+            'staffId'           => $this->staffId,
             'timestamp'         => $this->timestamp->format("Y-m-d H:i:s"),
         ];
+    }
+
+    public function getStaffId(): ?int
+    {
+        return $this->staffId;
+    }
+
+    public function setStaffId(int $staffId): self
+    {
+        $this->staffId = $staffId;
+
+        return $this;
     }
 }

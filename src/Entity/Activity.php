@@ -4,11 +4,12 @@ namespace App\Entity;
 
 use App\Repository\ActivityRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 /**
  * @ORM\Entity(repositoryClass=ActivityRepository::class)
  */
-class Activity
+class Activity implements JsonSerializable
 {
     /**
      * @ORM\Id
@@ -41,6 +42,24 @@ class Activity
      * @ORM\Column(type="datetime")
      */
     private $timestamp;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $staffId;
+
+        public function jsonSerialize()
+    {
+        return [
+            'id'            => $this->id,
+            'cardId'        => $this->cardId,
+            'remarks'       => $this->remarks,
+            'dateResolved'  => $this->dateResolved,
+            'createdBy'     => $this->createdBy,
+            'staffId'       => $this->staffId,
+            'timestamp'     => $this->timestamp->format("Y-m-d H:i:s"),
+        ];
+    }
 
     public function getId(): ?int
     {
@@ -106,4 +125,18 @@ class Activity
 
         return $this;
     }
+
+    public function getStaffId(): ?int
+    {
+        return $this->staffId;
+    }
+
+    public function setStaffId(int $staffId): self
+    {
+        $this->staffId = $staffId;
+
+        return $this;
+    }
+
+
 }

@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Repository\ActivityRepository;
 use App\Entity\Activity;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Service\CardService;
 
 use App\Service\Validation\ActivityValidationService;
 
@@ -14,11 +15,15 @@ class ActivityService
     private $em;
     private $activityValidationService;
 
-    public function __construct(EntityManagerInterface $em, ActivityValidationService $activityValidationService, ActivityRepository $activityRepository)
+    public function __construct(EntityManagerInterface $em, 
+                                ActivityValidationService $activityValidationService, 
+                                ActivityRepository $activityRepository, 
+                                CardService $cardService)
     {
         $this->em = $em;
         $this->activityValidationService = $activityValidationService;
         $this->activityRepository = $activityRepository;
+        $this->cardService = $cardService;
     }
 
     public function createActivity($data) 
@@ -39,6 +44,7 @@ class ActivityService
         $activity->setDateResolved($dateResolved);
         $activity->setRemarks($data["remarks"]);
         $activity->setCreatedBy($data["createdBy"]);
+        $activity->setStaffId($data["staffId"]);
         $activity->setTimestamp();
         $this->em->persist($activity); 
 
@@ -48,6 +54,10 @@ class ActivityService
             return ["error" => $e->getMessage()];
         }
 
+        if (!is_null($data["dateResolved"])) {
+            $this->cardService->closingTicket($data["cardId"], $dateResolved);
+        }
+        
         return ["result" => "Activity created"];
     }
 

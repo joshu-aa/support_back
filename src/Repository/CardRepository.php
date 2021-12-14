@@ -46,4 +46,59 @@ class CardRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function searchTickets($data)
+    {
+        //sort by
+        if($data["sortBy"] == "desc") {
+            $builder = $this->createQueryBuilder('c')
+                ->orderBy('c.timestamp', 'DESC');
+        } else {
+            $builder = $this->createQueryBuilder('c')
+                ->orderBy('c.timestamp', 'ASC');
+        }
+
+        $parameters["ticketStatus"] = $data["ticketStatus"];
+        $parameters["assignedGroup"] = $data["assignedGroup"];
+
+
+        if($data["searchParam"]) {
+
+            if(strlen($data["searchParam"]) !== 10) {
+                if($data["location"] != "All") {
+                    $builder = $builder
+                    ->andWhere('c.location = :location')
+                    ->andWhere('c.unitNumber = :unitNumber');
+                    $parameters['unitNumber'] = $data["searchParam"];
+                    $parameters['location'] = $data["location"];
+                } else {
+                    $builder = $builder
+                        ->andWhere('c.unitNumber = :unitNumber');
+                        $parameters['unitNumber'] = $data["searchParam"];
+                }
+
+            } else {
+
+                $builder = $builder
+                    ->andWhere('c.subscriberId = :subscriberId');
+
+                    $parameters['subscriberId'] = $data["searchParam"];
+            }
+        } else {
+                if($data["location"] !== "All") {
+                    $builder = $builder
+                    ->andWhere('c.location = :location');
+
+                    $parameters['location'] = $data["location"];
+                }
+        }
+
+        return $builder
+            ->andWhere('c.ticketStatus = :ticketStatus')
+            ->andWhere('c.assignedGroup = :assignedGroup')
+            ->setParameters($parameters)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

@@ -43,4 +43,16 @@ class CardController extends AbstractController
         return $this->json($response,  JsonResponse::HTTP_OK);
     }
 
+    /**
+     * @Route("/api/crm/search_ticket", methods={"POST"}, name="search_ticket")
+     */
+    public function searchTicket(Request $request)
+    {
+        $content = json_decode($request->getContent(), true);
+        $response = $this->cardService->searchTicket($content);
+        if (array_key_exists('error', $response)) {
+            return $this->json($response, JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        return $this->json($response,  JsonResponse::HTTP_OK);
+    }
 }

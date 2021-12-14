@@ -22,11 +22,13 @@ class ActivityValidationService
         $cardId         = str_replace(' ', '', $data["cardId"]);
         $remarks        = str_replace(' ', '', $data["remarks"]);
         $createdBy      = str_replace(' ', '', $data["createdBy"]);
+        $staffId        = str_replace(' ', '', $data["staffId"]);
 
         $input = [
                     'cardId'        => $cardId, 
                     'createdBy'     => $createdBy, 
-                    'remarks'       => $remarks
+                    'remarks'       => $remarks,
+                    'staffId'       => $staffId,
                 ];
 
         $constraints = new Assert\Collection([
@@ -38,6 +40,9 @@ class ActivityValidationService
  
             'createdBy'     =>  [new Assert\NotBlank(["message"    => 'created by must not be blank']), 
                                  new Assert\NotNull(["message"     => 'created by must not be blank'])],
+
+            'staffId'     =>  [new Assert\NotBlank(["message"      => 'Staff ID by must not be blank']), 
+                                 new Assert\NotNull(["message"     => 'Staff ID by must not be blank'])],
         ]); 
 
         $violations = $this->validator->validate($input, $constraints);

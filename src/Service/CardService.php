@@ -39,6 +39,7 @@ class CardService
         $card->setTicketStatus("pending");
         $card->setAssignedGroup($data["assignedGroup"]);
         $card->setCreatedBy($data["createdBy"]);
+        $card->setStaffId($data["staffId"]);
         $card->setTimestamp();
         $this->em->persist($card);
         try {
@@ -54,5 +55,25 @@ class CardService
     {
         $cards = $this->cardRepository->getCards($data);
         return $cards;
+    }
+
+    public function closingTicket($cardId, $dateResolved)
+    {
+        $card = $this->cardRepository->findOneBy(["id" => $cardId]);
+        $card->setDateResolved($dateResolved);
+        $card->setTicketStatus("resolved");
+        $this->em->persist($card);
+        $this->em->flush();
+    }
+
+    public function searchTicket($data)
+    {
+        try {
+            $card = $this->cardRepository->searchTickets($data);
+        } catch (\Throwable $th) {
+            return ["error" => "getting tickets failed"];
+        }
+        
+        return $card;
     }
 }

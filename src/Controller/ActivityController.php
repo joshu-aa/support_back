@@ -42,6 +42,4 @@ class ActivityController extends AbstractController
         }
         return $this->json($response,  JsonResponse::HTTP_OK);
     }
-
-
 }
