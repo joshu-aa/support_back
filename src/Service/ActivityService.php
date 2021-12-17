@@ -26,7 +26,7 @@ class ActivityService
         $this->cardService = $cardService;
     }
 
-    public function createActivity($data) 
+    public function createActivity($data,$image) 
     {
         //validation of request
         $validation = $this->activityValidationService->validateCreateActivity($data);
@@ -34,17 +34,19 @@ class ActivityService
             return $validation;
         }
 
-        $dateResolved = null;
-        if (!is_null($data["dateResolved"])) {
-            $dateResolved =  new \DateTime($data["dateResolved"]);
+        $scheduledDate = null;
+        if(!($data["scheduledDate"] == "null" || $data["scheduledDate"] == null)) {
+            $scheduledDate = new \DateTime($data["scheduledDate"]);
         }
-
+        $activityDate = new \DateTime($data["activityDate"]);
         $activity = new Activity();
         $activity->setCardId($data["cardId"]); 
-        $activity->setDateResolved($dateResolved);
+        $activity->setActivityDate($activityDate);
         $activity->setRemarks($data["remarks"]);
         $activity->setCreatedBy($data["createdBy"]);
         $activity->setStaffId($data["staffId"]);
+        $activity->setImageFile($image);
+        $activity->setScheduledDate($scheduledDate);
         $activity->setTimestamp();
         $this->em->persist($activity); 
 
@@ -54,9 +56,19 @@ class ActivityService
             return ["error" => $e->getMessage()];
         }
 
-        if (!is_null($data["dateResolved"])) {
-            $this->cardService->closingTicket($data["cardId"], $dateResolved);
+        if ($data["isClose"] == "true") {
+            $this->cardService->closingTicket($data["cardId"], $activityDate);
         }
+
+        if ($data["action"] == "forward") {
+            $this->cardService->transferTicket($data);
+        }
+        
+        //if the ticket is scheduled for somthing
+        if(!is_null($scheduledDate)) {
+            $this->cardService->setSchedule($data["cardId"], $scheduledDate);
+        }
+
         
         return ["result" => "Activity created"];
     }

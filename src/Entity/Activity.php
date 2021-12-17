@@ -5,9 +5,12 @@ namespace App\Entity;
 use App\Repository\ActivityRepository;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * @ORM\Entity(repositoryClass=ActivityRepository::class)
+ * @Vich\Uploadable
  */
 class Activity implements JsonSerializable
 {
@@ -36,7 +39,7 @@ class Activity implements JsonSerializable
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $dateResolved;
+    private $activityDate;
 
     /**
      * @ORM\Column(type="datetime")
@@ -48,17 +51,64 @@ class Activity implements JsonSerializable
      */
     private $staffId;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
+     */
+    private $image;
+
+    /**
+     * @Vich\UploadableField(mapping="activity_images", fileNameProperty="image")
+     * @var File
+     */
+    private $imageFile;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $scheduledDate;
+    
+
         public function jsonSerialize()
     {
         return [
             'id'            => $this->id,
             'cardId'        => $this->cardId,
             'remarks'       => $this->remarks,
-            'dateResolved'  => $this->dateResolved,
+            'activityDate'  => $this->activityDate,
             'createdBy'     => $this->createdBy,
             'staffId'       => $this->staffId,
+            'image'         => $this->image,
             'timestamp'     => $this->timestamp->format("Y-m-d H:i:s"),
         ];
+    }
+
+    public function setImageFile(File $image = null)
+    {
+        $this->imageFile = $image;
+
+        // VERY IMPORTANT:
+        // It is required that at least one field changes if you are using Doctrine,
+        // otherwise the event listeners won't be called and the file is lost
+        if ($image) {
+            // if 'updatedAt' is not defined in your entity, use another property
+            $this->timestamp = new \DateTime('now');
+        }
+    }
+
+    public function getImageFile()
+    {
+        return $this->imageFile;
+    }
+
+     public function setImage($image)
+    {
+        $this->image = $image;
+    }
+
+    public function getImage()
+    {
+        return $this->image;
     }
 
     public function getId(): ?int
@@ -102,14 +152,14 @@ class Activity implements JsonSerializable
         return $this;
     }
 
-    public function getDateResolved(): ?\DateTimeInterface
+    public function getActivityDate(): ?\DateTimeInterface
     {
-        return $this->dateResolved;
+        return $this->activityDate;
     }
 
-    public function setDateResolved(?\DateTimeInterface $dateResolved): self
+    public function setActivityDate(?\DateTimeInterface $activityDate): self
     {
-        $this->dateResolved = $dateResolved;
+        $this->activityDate = $activityDate;
 
         return $this;
     }
@@ -134,6 +184,18 @@ class Activity implements JsonSerializable
     public function setStaffId(int $staffId): self
     {
         $this->staffId = $staffId;
+
+        return $this;
+    }
+
+    public function getScheduledDate(): ?\DateTimeInterface
+    {
+        return $this->scheduledDate;
+    }
+
+    public function setScheduledDate(?\DateTimeInterface $scheduledDate): self
+    {
+        $this->scheduledDate = $scheduledDate;
 
         return $this;
     }

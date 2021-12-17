@@ -55,4 +55,17 @@ class CardController extends AbstractController
         }
         return $this->json($response,  JsonResponse::HTTP_OK);
     }
+
+    /**
+     * @Route("/api/crm/transfer_ticket", methods={"POST"}, name="transfer_ticket")
+     */
+    public function transferTicket(Request $request)
+    {
+        $content = json_decode($request->getContent(), true);
+        $response = $this->cardService->transferTicket($content);
+        if (array_key_exists('error', $response)) {
+            return $this->json($response, JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        return $this->json($response,  JsonResponse::HTTP_OK);
+    }
 }

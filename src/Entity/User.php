@@ -51,6 +51,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $contactNumber;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $userGroup;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $created_at;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $updatedAt;
+
     public function getStaffId(): ?int
     {
         return $this->staffId;
@@ -172,6 +187,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setContactNumber(?string $contactNumber): self
     {
         $this->contactNumber = $contactNumber;
+
+        return $this;
+    }
+
+    public function getUserGroup(): ?string
+    {
+        return $this->userGroup;
+    }
+
+    public function setUserGroup(string $userGroup): self
+    {
+        $this->userGroup = $userGroup;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(): self
+    {
+        $this->created_at = new \DateTime();
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(): self
+    {
+        $this->updatedAt = new \DateTime();
 
         return $this;
     }

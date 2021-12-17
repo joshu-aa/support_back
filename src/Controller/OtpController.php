@@ -50,5 +50,19 @@ class OtpController extends AbstractController
         return $this->json($response);
     }
 
+    /**
+     * @Route("/api/crm/forgot_password", methods={"POST"}, name="forgot_password")
+     */
+    public function forgotPassword(Request $request)
+    {
+        $content = json_decode($request->getContent(), true);
+        $response = $this->userService->forgotPassword($content);
+
+        if (array_key_exists('error', $response)) {
+            return $this->json($response, JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        return $this->json($response);
+    }
+
     
 }

@@ -82,6 +82,16 @@ class Card implements JsonSerializable
      */
     private $staffId;
 
+    /**
+     * @ORM\Column(type="string", unique=true)
+     */
+    private $referenceNumber;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $scheduledDate;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -233,22 +243,39 @@ class Card implements JsonSerializable
 
     public function jsonSerialize()
     {
-        return [
+        $jsonSerialize = [
             'id'                => $this->id,
             'title'             => $this->title,
             'description'       => $this->description,
             'ticketStatus'      => $this->ticketStatus,
             'assignedGroup'     => $this->assignedGroup,
-            'dateResolved'      => $this->dateResolved,
-            'qualityControlFlag' => $this->qualityControlFlag,
+            'dateResolved'      => null,
+            'qualityControlFlag'=> $this->qualityControlFlag,
             'subscriberId'      => $this->subscriberId,
             'location'          => $this->location,
             'unitNumber'        => $this->unitNumber,
             'towerName'         => $this->towerName,
             'createdBy'         => $this->createdBy,
             'staffId'           => $this->staffId,
+            'referenceNumber'   => $this->referenceNumber,
             'timestamp'         => $this->timestamp->format("Y-m-d H:i:s"),
+            "scheduledDate"     => null
         ];
+
+        if (!is_null($this->dateResolved)) {
+            $jsonSerialize["dateResolved"] = $this->dateResolved->format("Y-m-d H:i:s");
+        } else {
+            $jsonSerialize["dateResolved"] = null;
+        }
+
+        if (!is_null($this->scheduledDate)) {
+            $jsonSerialize["scheduledDate"] = $this->scheduledDate->format("Y-m-d H:i:s");
+        } else {
+            $jsonSerialize["scheduledDate"] = null;
+        }
+
+        
+        return $jsonSerialize;
     }
 
     public function getStaffId(): ?int
@@ -259,6 +286,30 @@ class Card implements JsonSerializable
     public function setStaffId(int $staffId): self
     {
         $this->staffId = $staffId;
+
+        return $this;
+    }
+
+    public function getReferenceNumber(): ?int
+    {
+        return $this->referenceNumber;
+    }
+
+    public function setReferenceNumber(int $referenceNumber): self
+    {
+        $this->referenceNumber = $referenceNumber;
+
+        return $this;
+    }
+
+    public function getScheduledDate(): ?\DateTimeInterface
+    {
+        return $this->scheduledDate;
+    }
+
+    public function setScheduledDate(?\DateTimeInterface $scheduledDate): self
+    {
+        $this->scheduledDate = $scheduledDate;
 
         return $this;
     }

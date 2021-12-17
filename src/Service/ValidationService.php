@@ -18,7 +18,7 @@ class ValidationService
 
     public function validateRegister ($data)
     {
-        if (empty($data['password']) || empty($data['firstName']) || empty($data['lastName'])) return ['error' => 'A required field is missing.'];
+        if (empty($data['password']) || empty($data['firstName']) || empty($data['lastName'] || empty($data["userGroup"]))) return ['error' => 'A required field is missing.'];
 
         if (empty($data['email'])) return ['error' => 'Please enter your email'];
 
@@ -50,7 +50,7 @@ class ValidationService
     {
         if (empty($data['password']) || empty($data['firstName']) || empty($data['lastName'])) return ['error' => 'A required field is missing.'];
 
-        if (empty($data['otcGroup'])) return ['error' => 'Please enter otc group'];
+        if (empty($data['userGroup'])) return ['error' => 'Please enter otc group'];
 
         if (empty($data['contactNumber'])) return ['error' => 'Please enter your contactNumber'];
 

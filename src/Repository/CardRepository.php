@@ -40,8 +40,7 @@ class CardRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.ticketStatus = :ticketStatus')
-            ->andWhere('c.assignedGroup = :assignedGroup')
-            ->setParameters(['ticketStatus' => $data["ticketStatus"], 'assignedGroup' => $data["assignedGroup"]])
+            ->setParameters(['ticketStatus' => $data["ticketStatus"]])
             ->getQuery()
             ->getResult()
         ;
@@ -64,7 +63,7 @@ class CardRepository extends ServiceEntityRepository
 
         if($data["searchParam"]) {
 
-            if(strlen($data["searchParam"]) !== 10) {
+            if(strlen($data["searchParam"]) < 10) {
                 if($data["location"] != "All") {
                     $builder = $builder
                     ->andWhere('c.location = :location')
@@ -77,7 +76,12 @@ class CardRepository extends ServiceEntityRepository
                         $parameters['unitNumber'] = $data["searchParam"];
                 }
 
-            } else {
+            } else if(strlen($data["searchParam"]) > 10) {
+                $builder = $builder
+                    ->andWhere('c.referenceNumber = :referenceNumber');
+
+                    $parameters['referenceNumber'] = $data["searchParam"];
+            }else {
 
                 $builder = $builder
                     ->andWhere('c.subscriberId = :subscriberId');
@@ -97,6 +101,20 @@ class CardRepository extends ServiceEntityRepository
             ->andWhere('c.ticketStatus = :ticketStatus')
             ->andWhere('c.assignedGroup = :assignedGroup')
             ->setParameters($parameters)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    
+    public function getLatestReferenceNumber()
+    {
+        return $this->createQueryBuilder('c')
+            ->select('c.referenceNumber')
+            ->andWhere('c.referenceNumber != :referenceNumber')
+            ->setMaxResults(1)
+            ->orderBy('c.id', 'DESC')
+            ->setParameters(['referenceNumber' => 0])
             ->getQuery()
             ->getResult()
         ;

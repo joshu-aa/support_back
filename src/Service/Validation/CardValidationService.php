@@ -21,17 +21,13 @@ class CardValidationService
         //replacing space to non-space
         $title          = str_replace(' ', '', $data["title"]);
         $subscriberId   = str_replace(' ', '', $data["subscriberId"]);
-        $location       = str_replace(' ', '', $data["location"]);
         $createdBy      = str_replace(' ', '', $data["createdBy"]);
-        $unitNumber     = str_replace(' ', '', $data["unitNumber"]);
         $staffId        = str_replace(' ', '', $data["staffId"]);
 
         $input = [
                     'title'         => $title, 
                     'subscriberId'  => $subscriberId, 
-                    'location'      => $location, 
                     'createdBy'     => $createdBy, 
-                    'unitNumber'    => $unitNumber,
                     'staffId'       => $staffId,
                 ];
 
@@ -43,14 +39,8 @@ class CardValidationService
                                 new Assert\NotBlank(["message"  => 'Subscriber ID must not be blank']), 
                                 new Assert\NotNull(["message"   => 'Subscriber ID must not be blank'])],
 
-            'location'      => [new Assert\NotBlank(["message"  => 'Location must not be blank']), 
-                                new Assert\NotNull(["message"   => 'Location must not be blank'])],
-
             'createdBy'     => [new Assert\NotBlank(["message"  => 'created by must not be blank']), 
                                 new Assert\NotNull(["message"   => 'created by must not be blank'])],
-
-            'unitNumber'    => [new Assert\NotBlank(["message"  => 'Unit number must not be blank']), 
-                                new Assert\NotNull(["message"   => 'Unit number must not be blank'])],
 
             'staffId'       => [new Assert\NotBlank(["message"  => 'Staff ID must not be blank']), 
                                 new Assert\NotNull(["message"   => 'Staff ID must not be blank'])],

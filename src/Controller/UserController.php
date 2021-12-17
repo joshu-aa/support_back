@@ -30,8 +30,39 @@ class UserController extends AbstractController
             "firstName", 
             "lastName",
             "email",
+            "userGroup",
             "roles"
         ]);
         return new JsonResponse($data);
+    }
+
+
+    /**
+     * @Route("api/crm/register", methods={"POST"}, name="user_register")
+     */
+    public function userRegister(Request $request)
+    {
+        $content = json_decode($request->getContent(), true);
+        $response = $this->userService->userRegister($content);
+
+        if (array_key_exists('error', $response)) {
+            return $this->json($response, JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        return $this->json($response);
+    }
+
+    
+    /**
+     * @Route("api/crm/approve_registrant", methods={"POST"}, name="approved_registrant")
+     */
+    public function approveRegistrant(Request $request)
+    {
+        $content = json_decode($request->getContent(), true);
+        $response = $this->userService->approveRegistrant($content);
+
+        if (array_key_exists('error', $response)) {
+            return $this->json($response, JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        return $this->json($response);
     }
 }
